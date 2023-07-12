@@ -4,15 +4,50 @@ import {
   View,
   Text,
   TextInput,
-  ImageBackground,
+  Image,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
+import avatar from "../assets/images/avatar.jpg";
+import avatarNone from "../assets/images/avatar-none.png";
+import AntDesignIcon from "react-native-vector-icons/AntDesign";
 
 export const RegistrationScreen = () => {
   const [hidePassword, setHidePassword] = useState(true);
+  const [inputLoginFocus, setInputLoginFocus] = useState(false);
+  const [inputMailFocus, setInputMailFocus] = useState(false);
+  const [inputPasswordFocus, setInputPasswordFocus] = useState(false);
+  const [addedPhoto, setAddedPhoto] = useState(false);
+
+  const iconPlus = (
+    <AntDesignIcon
+      name="pluscircleo"
+      size={25}
+      color="#FF6C00"
+      style={[styles.photoBtn, { backgroundColor: "#FFF" }]}
+      onPress={() => setAddedPhoto(!addedPhoto)}
+    />
+  );
+  const iconDelete = (
+    <AntDesignIcon
+      name="closecircleo"
+      size={25}
+      color="#BDBDBD"
+      style={[styles.photoBtn, { backgroundColor: "#F6F6F6" }]}
+      onPress={() => setAddedPhoto(!addedPhoto)}
+    />
+  );
 
   return (
-    <View style={styles.screen}>
-      <View
+    <View
+      style={{
+        ...styles.screen,
+        marginBottom:
+          inputPasswordFocus || inputMailFocus || inputLoginFocus ? -150 : 0,
+      }}
+    >
+      <Image
+        source={!addedPhoto ? avatarNone : avatar}
         style={[
           styles.avatar,
           {
@@ -20,33 +55,79 @@ export const RegistrationScreen = () => {
           },
         ]}
       />
+      {!addedPhoto ? iconPlus : iconDelete}
       <Text style={styles.title}>Реєстрація</Text>
-      <TextInput
-        name="login"
-        textContentType="username"
-        placeholder="Логін"
-        style={styles.inputText}
-      />
-      <TextInput
-        name="email"
-        textContentType="emailAddress"
-        placeholder="Адреса електронної пошти"
-        style={styles.inputText}
-      />
-      <View style={styles.inputPassword}>
-        <TextInput
-          style={styles.inputTextPassword}
-          name="password"
-          textContentType="password"
-          secureTextEntry={hidePassword ? true : false}
-          placeholder="Пароль"
-        />
-        <Text
-          style={styles.btnShow}
-          onPress={() => setHidePassword(!hidePassword)}
+      <View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
-          {hidePassword ? "Показати" : "Сховати"}
-        </Text>
+          <TextInput
+            name="login"
+            textContentType="username"
+            placeholder="Логін"
+            style={{
+              ...styles.inputText,
+              borderColor: !inputLoginFocus ? "#E8E8E8" : "#FF6C00",
+              backgroundColor: !inputLoginFocus ? "#F6F6F6" : "#FFF",
+            }}
+            onFocus={() => {
+              setInputLoginFocus(!inputLoginFocus);
+              // setKeyboardOpen(!keyboardOpen && true);
+            }}
+            onBlur={() => {
+              setInputLoginFocus(!inputLoginFocus);
+              // setKeyboardOpen(keyboardOpen && false);
+            }}
+          />
+          <TextInput
+            name="email"
+            textContentType="emailAddress"
+            placeholder="Адреса електронної пошти"
+            style={{
+              ...styles.inputText,
+              borderColor: !inputMailFocus ? "#E8E8E8" : "#FF6C00",
+              backgroundColor: !inputMailFocus ? "#F6F6F6" : "#FFF",
+            }}
+            onFocus={() => {
+              setInputMailFocus(!inputMailFocus);
+              // setKeyboardOpen(!keyboardOpen && true);
+            }}
+            onBlur={() => {
+              setInputMailFocus(!inputMailFocus);
+              // setKeyboardOpen(keyboardOpen && false);
+            }}
+          />
+          <View
+            style={{
+              ...styles.inputPassword,
+
+              borderColor: !inputPasswordFocus ? "#E8E8E8" : "#FF6C00",
+              backgroundColor: !inputPasswordFocus ? "#F6F6F6" : "#FFF",
+            }}
+          >
+            <TextInput
+              style={styles.inputTextPassword}
+              name="password"
+              textContentType="password"
+              secureTextEntry={hidePassword ? true : false}
+              placeholder="Пароль"
+              onFocus={() => {
+                setInputPasswordFocus(!inputPasswordFocus);
+                // setKeyboardOpen(!keyboardOpen && true);
+              }}
+              onBlur={() => {
+                setInputPasswordFocus(!inputPasswordFocus);
+                // setKeyboardOpen(keyboardOpen && false);
+              }}
+            />
+            <Text
+              style={styles.btnShow}
+              onPress={() => setHidePassword(!hidePassword)}
+            >
+              {hidePassword ? "Показати" : "Сховати"}
+            </Text>
+          </View>
+        </KeyboardAvoidingView>
       </View>
       <Text style={styles.btnSubmit}>Зареєстуватися</Text>
       <Text style={styles.logInText}>Вже є акаунт? Увійти</Text>
@@ -55,16 +136,6 @@ export const RegistrationScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  avatar: {
-    position: "absolute",
-    top: 0,
-    right: "50%",
-    width: 120,
-    height: 120,
-    borderRadius: 16,
-    backgroundColor: "#F6F6F6",
-  },
-
   screen: {
     position: "relative",
     width: "100%",
@@ -74,8 +145,25 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 92,
-    paddingBottom: 78,
     alignItems: "center",
+    justifyContent: "flex-end",
+  },
+
+  avatar: {
+    position: "absolute",
+    top: 0,
+    right: "50%",
+    width: 120,
+    height: 120,
+    borderRadius: 16,
+  },
+
+  photoBtn: {
+    position: "absolute",
+    borderRadius: 25,
+    top: 22,
+    right: "35%",
+    // backgroundColor: "#F6F6F6",
   },
 
   title: {
@@ -91,18 +179,17 @@ const styles = StyleSheet.create({
     height: 50,
     fontFamily: "Roboto-Regular",
     fontSize: 16,
-    backgroundColor: "#F6F6F6",
     paddingBottom: 15,
     paddingTop: 15,
     paddingLeft: 16,
     paddingRight: 16,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#E8E8E8",
     marginBottom: 16,
   },
 
   inputTextPassword: {
+    width: "100%",
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     lineHeight: 19,
@@ -114,14 +201,12 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 50,
     flexDirection: "row",
-    backgroundColor: "#F6F6F6",
     paddingBottom: 15,
     paddingTop: 15,
     paddingLeft: 16,
     paddingRight: 16,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#E8E8E8",
     marginBottom: 43,
     justifyContent: "center",
   },
@@ -153,5 +238,6 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     color: "#1B4371",
+    marginBottom: 45,
   },
 });

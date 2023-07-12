@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { useFonts } from "expo-font";
-import { View, StyleSheet, ImageBackground } from "react-native";
+import { StyleSheet, ImageBackground } from "react-native";
 import { RegistrationScreen } from "./Screens/RegistrationScreen";
 import { LoginScreen } from "./Screens/LoginScreen";
 
