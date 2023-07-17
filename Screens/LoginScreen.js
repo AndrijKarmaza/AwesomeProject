@@ -6,74 +6,91 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 
 export const LoginScreen = () => {
   const [hidePassword, setHidePassword] = useState(true);
   const [inputMailFocus, setInputMailFocus] = useState(false);
   const [inputPasswordFocus, setInputPasswordFocus] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const onSubmit = () => {
+    console.log(`Log-in data: Email: ${email}, Password: ${password}`);
+    formReset();
+  };
+
+  const formReset = () => {
+    setEmail("");
+    setPassword("");
+  };
 
   return (
-    <View
-      style={{
-        ...styles.screen,
-        marginBottom: inputPasswordFocus || inputMailFocus ? -216 : 0,
-      }}
-    >
-      <Text style={styles.title}> Увійти</Text>
-      <View>
-        <KeyboardAvoidingView
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
-        >
-          <TextInput
-            name="email"
-            textContentType="emailAddress"
-            placeholder="Адреса електронної пошти"
-            style={{
-              ...styles.inputText,
-              borderColor: !inputMailFocus ? "#E8E8E8" : "#FF6C00",
-              backgroundColor: !inputMailFocus ? "#F6F6F6" : "#FFF",
-            }}
-            onFocus={() => {
-              setInputMailFocus(!inputMailFocus);
-            }}
-            onBlur={() => {
-              setInputMailFocus(!inputMailFocus);
-            }}
-          />
-          <View
-            style={{
-              ...styles.inputPassword,
-
-              borderColor: !inputPasswordFocus ? "#E8E8E8" : "#FF6C00",
-              backgroundColor: !inputPasswordFocus ? "#F6F6F6" : "#FFF",
-            }}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.screen}>
+        <Text style={styles.title}> Увійти</Text>
+        <View>
+          <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
           >
             <TextInput
-              name="password"
-              textContentType="password"
-              secureTextEntry={hidePassword ? true : false}
-              placeholder="Пароль"
-              style={styles.inputTextPassword}
+              name="email"
+              textContentType="emailAddress"
+              placeholder="Адреса електронної пошти"
+              value={email}
+              onChangeText={setEmail}
+              style={{
+                ...styles.inputText,
+                borderColor: !inputMailFocus ? "#E8E8E8" : "#FF6C00",
+                backgroundColor: !inputMailFocus ? "#F6F6F6" : "#FFF",
+              }}
               onFocus={() => {
-                setInputPasswordFocus(!inputPasswordFocus);
+                setInputMailFocus(!inputMailFocus);
               }}
               onBlur={() => {
-                setInputPasswordFocus(!inputPasswordFocus);
+                setInputMailFocus(!inputMailFocus);
               }}
             />
-            <Text
-              style={styles.btnShow}
-              onPress={() => setHidePassword(!hidePassword)}
+            <View
+              style={{
+                ...styles.inputPassword,
+
+                borderColor: !inputPasswordFocus ? "#E8E8E8" : "#FF6C00",
+                backgroundColor: !inputPasswordFocus ? "#F6F6F6" : "#FFF",
+              }}
             >
-              {hidePassword ? "Показати" : "Сховати"}
-            </Text>
-          </View>
-        </KeyboardAvoidingView>
+              <TextInput
+                name="password"
+                textContentType="password"
+                secureTextEntry={hidePassword ? true : false}
+                placeholder="Пароль"
+                value={password}
+                onChangeText={setPassword}
+                style={styles.inputTextPassword}
+                onFocus={() => {
+                  setInputPasswordFocus(!inputPasswordFocus);
+                }}
+                onBlur={() => {
+                  setInputPasswordFocus(!inputPasswordFocus);
+                }}
+              />
+              <Text
+                style={styles.btnShow}
+                onPress={() => setHidePassword(!hidePassword)}
+              >
+                {hidePassword ? "Показати" : "Сховати"}
+              </Text>
+            </View>
+          </KeyboardAvoidingView>
+        </View>
+        <Text style={styles.btnSubmit} onPress={onSubmit}>
+          Увійти
+        </Text>
+        <Text style={styles.logInText}>Немає акаунту? Зареєструватися</Text>
       </View>
-      <Text style={styles.btnSubmit}>Увійти</Text>
-      <Text style={styles.logInText}>Немає акаунту? Зареєструватися</Text>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
