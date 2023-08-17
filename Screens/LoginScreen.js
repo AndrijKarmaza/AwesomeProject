@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 import {
   View,
   Text,
@@ -8,6 +10,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  ImageBackground,
 } from "react-native";
 
 export const LoginScreen = () => {
@@ -17,9 +20,12 @@ export const LoginScreen = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const navigation = useNavigation();
+
   const onSubmit = () => {
     console.log(`Log-in data: Email: ${email}, Password: ${password}`);
     formReset();
+    navigation.navigate("Home");
   };
 
   const formReset = () => {
@@ -29,72 +35,91 @@ export const LoginScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.screen}>
-        <Text style={styles.title}> Увійти</Text>
-        <View>
-          <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
-          >
-            <TextInput
-              name="email"
-              textContentType="emailAddress"
-              placeholder="Адреса електронної пошти"
-              value={email}
-              onChangeText={setEmail}
-              style={{
-                ...styles.inputText,
-                borderColor: !inputMailFocus ? "#E8E8E8" : "#FF6C00",
-                backgroundColor: !inputMailFocus ? "#F6F6F6" : "#FFF",
-              }}
-              onFocus={() => {
-                setInputMailFocus(!inputMailFocus);
-              }}
-              onBlur={() => {
-                setInputMailFocus(!inputMailFocus);
-              }}
-            />
-            <View
-              style={{
-                ...styles.inputPassword,
-
-                borderColor: !inputPasswordFocus ? "#E8E8E8" : "#FF6C00",
-                backgroundColor: !inputPasswordFocus ? "#F6F6F6" : "#FFF",
-              }}
+      <ImageBackground
+        source={require("../assets/images/PhotoBG.png")}
+        resizeMode="cover"
+        style={styles.container}
+      >
+        <View style={styles.screen}>
+          <Text style={styles.title}> Увійти</Text>
+          <View>
+            <KeyboardAvoidingView
+              behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
               <TextInput
-                name="password"
-                textContentType="password"
-                secureTextEntry={hidePassword ? true : false}
-                placeholder="Пароль"
-                value={password}
-                onChangeText={setPassword}
-                style={styles.inputTextPassword}
+                name="email"
+                textContentType="emailAddress"
+                placeholder="Адреса електронної пошти"
+                value={email}
+                onChangeText={setEmail}
+                style={{
+                  ...styles.inputText,
+                  borderColor: !inputMailFocus ? "#E8E8E8" : "#FF6C00",
+                  backgroundColor: !inputMailFocus ? "#F6F6F6" : "#FFF",
+                }}
                 onFocus={() => {
-                  setInputPasswordFocus(!inputPasswordFocus);
+                  setInputMailFocus(!inputMailFocus);
                 }}
                 onBlur={() => {
-                  setInputPasswordFocus(!inputPasswordFocus);
+                  setInputMailFocus(!inputMailFocus);
                 }}
               />
-              <Text
-                style={styles.btnShow}
-                onPress={() => setHidePassword(!hidePassword)}
+              <View
+                style={{
+                  ...styles.inputPassword,
+
+                  borderColor: !inputPasswordFocus ? "#E8E8E8" : "#FF6C00",
+                  backgroundColor: !inputPasswordFocus ? "#F6F6F6" : "#FFF",
+                }}
               >
-                {hidePassword ? "Показати" : "Сховати"}
-              </Text>
-            </View>
-          </KeyboardAvoidingView>
+                <TextInput
+                  name="password"
+                  textContentType="password"
+                  secureTextEntry={hidePassword ? true : false}
+                  placeholder="Пароль"
+                  value={password}
+                  onChangeText={setPassword}
+                  style={styles.inputTextPassword}
+                  onFocus={() => {
+                    setInputPasswordFocus(!inputPasswordFocus);
+                  }}
+                  onBlur={() => {
+                    setInputPasswordFocus(!inputPasswordFocus);
+                  }}
+                />
+                <Text
+                  style={styles.btnShow}
+                  onPress={() => setHidePassword(!hidePassword)}
+                >
+                  {hidePassword ? "Показати" : "Сховати"}
+                </Text>
+              </View>
+            </KeyboardAvoidingView>
+          </View>
+          <Text style={styles.btnSubmit} onPress={onSubmit}>
+            Увійти
+          </Text>
+          <Text
+            onPress={() => navigation.navigate("Registration")}
+            style={styles.logInText}
+          >
+            Немає акаунту? Зареєструватися
+          </Text>
         </View>
-        <Text style={styles.btnSubmit} onPress={onSubmit}>
-          Увійти
-        </Text>
-        <Text style={styles.logInText}>Немає акаунту? Зареєструватися</Text>
-      </View>
+        <StatusBar style="auto" />
+      </ImageBackground>
     </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+
   screen: {
     width: "100%",
     backgroundColor: "#FFF",
