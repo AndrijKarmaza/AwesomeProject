@@ -1,54 +1,54 @@
-import { Text, View, Image, StyleSheet } from "react-native";
+import React from "react";
+import { View, ScrollView } from "react-native";
 
-export const PostsScreen = () => {
+import { PostCard } from "../src/components/PostCard";
+import Profile from "../src/components/Profile";
+const avatar = require("../assets/images/avatar.jpg");
+import posts from "../assets/data/posts";
+
+const PostsScreen = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.userInfo}>
-        <Image
-          source={require("../assets/images/avatar-small.jpg")}
-          style={styles.userAvatar}
-        />
-        <View>
-          <Text style={styles.userName}>Natali Romanova</Text>
-          <Text style={styles.userMail}>email@example.com</Text>
-        </View>
-      </View>
+    <View
+      style={{
+        width: "100%",
+        height: "100%",
+        backgroundColor: "#ffffff",
+      }}
+    >
+      <Profile
+        avatar={avatar}
+        name="Natali Romanova"
+        email="email@example.com"
+      />
+      <ScrollView
+        style={{ margin: 0, padding: 16 }}
+        showsVerticalScrollIndicator={false}
+      >
+        {posts.map(
+          ({
+            img,
+            description,
+            likes,
+            comments,
+            locationName,
+            geoLocation,
+          }) => {
+            return (
+              <PostCard
+                key={description}
+                image={img}
+                description={description}
+                likes={likes}
+                comments={comments}
+                locationName={locationName}
+                geoLocation={geoLocation}
+              />
+            );
+          }
+        )}
+      </ScrollView>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#fff",
-    flex: 1,
-    paddingTop: 32,
-    paddingLeft: 16,
-    paddingRight: 16,
-  },
-
-  userInfo: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingBottom: 32,
-  },
-
-  userAvatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 16,
-    marginRight: 8,
-  },
-
-  userName: {
-    color: "#212121",
-    fontFamily: "Roboto-Bold",
-    fontSize: 13,
-  },
-
-  userMail: {
-    color: "rgba(33, 33, 33, 0.80)",
-    fontFamily: "Roboto-Regular",
-    fontSize: 11,
-  },
-});
+export default PostsScreen;

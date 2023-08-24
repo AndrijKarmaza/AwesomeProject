@@ -1,9 +1,9 @@
-import { PostsScreen } from "./PostsScreen";
-import { Profile } from "./ProfileScreen";
-import { CreatePostsScreen } from "./CreatePostsScreen";
+import PostsScreen from "./PostsScreen";
+import Profile from "./ProfileScreen";
+import CreatePostsScreen from "./CreatePostsScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FeatherIcon from "react-native-vector-icons/Feather";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 const Tabs = createBottomTabNavigator();
 
@@ -59,7 +59,7 @@ export const Home = () => {
       <Tabs.Screen
         name="CreatePost"
         component={CreatePostsScreen}
-        options={() => ({
+        options={({ navigation }) => ({
           ...screenOption,
           title: "Створити публікацію",
           headerLeft: () => (
@@ -68,6 +68,7 @@ export const Home = () => {
               size={24}
               color="#212121CC"
               style={{ marginLeft: 16 }}
+              onPress={() => navigation.goBack()}
             />
           ),
           tabBarIcon: () => (
@@ -75,6 +76,7 @@ export const Home = () => {
               <FeatherIcon name="plus" size={20} color="#fff" />
             </View>
           ),
+          tabBarStyle: { display: "none" },
         })}
       />
       <Tabs.Screen

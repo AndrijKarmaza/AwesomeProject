@@ -25,7 +25,12 @@ export const LoginScreen = () => {
   const onSubmit = () => {
     console.log(`Log-in data: Email: ${email}, Password: ${password}`);
     formReset();
-    navigation.navigate("Home");
+    navigation.navigate("Home", {
+      screen: "PostsScreen",
+      params: {
+        user: "e-mail@example.com",
+      },
+    });
   };
 
   const formReset = () => {

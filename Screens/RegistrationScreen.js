@@ -53,7 +53,7 @@ export const RegistrationScreen = () => {
       `RegistrationData: Login: ${login}, Email: ${email}, Password: ${password}`
     );
     formReset();
-    navigation.navigate("Home");
+    navigation.navigate("Home", { screen: "PostsScreen" });
   };
 
   const formReset = () => {

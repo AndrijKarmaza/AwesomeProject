@@ -6,6 +6,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { RegistrationScreen } from "./Screens/RegistrationScreen";
 import { LoginScreen } from "./Screens/LoginScreen";
 import { Home } from "./Screens/Home";
+import MapScreen from "./Screens/MapScreen";
+import CommentsScreen from "./Screens/CommentsScreen";
+
 import FeatherIcon from "react-native-vector-icons/Feather";
 
 const MainStack = createStackNavigator();
@@ -38,6 +41,16 @@ export default function App() {
           <MainStack.Screen
             name="Home"
             component={Home}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="MapScreen"
+            component={MapScreen}
+            options={{ headerShown: false }}
+          />
+          <MainStack.Screen
+            name="CommentsScreen"
+            component={CommentsScreen}
             options={{ headerShown: false }}
           />
         </MainStack.Navigator>
