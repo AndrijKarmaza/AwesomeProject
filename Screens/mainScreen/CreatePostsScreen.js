@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,24 +8,24 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
-} from 'react-native';
-import { Camera } from 'expo-camera';
-import * as MediaLibrary from 'expo-media-library';
-import * as ImagePicker from 'expo-image-picker';
-import * as Location from 'expo-location';
-import { MaterialIcons, Feather } from '@expo/vector-icons';
+} from "react-native";
+import { Camera } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
+import * as Location from "expo-location";
+import { MaterialIcons, Feather } from "@expo/vector-icons";
 import {
   uploadPhotoToServer,
   writeDataToFirestore,
-} from '../../redux/post/postOperations';
-import { useAuth } from '../../hooks/useAuth';
+} from "../../redux/post/postOperations";
+import { useAuth } from "../../hooks/useAuth";
 
 export const CreatePostsScreen = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [location, setLocation] = useState(null);
   const [convertedCoordinate, setConvertedCoordinate] = useState(null);
   const [capturedPhoto, setCapturedPhoto] = useState(null);
-  const [namePost, setNamePost] = useState('');
+  const [namePost, setNamePost] = useState("");
   const [isDisabledPublishBtn, setIsDisabledPublishBtn] = useState(false);
 
   const {
@@ -38,14 +38,14 @@ export const CreatePostsScreen = ({ navigation }) => {
       await MediaLibrary.requestPermissionsAsync();
       await Location.requestForegroundPermissionsAsync();
 
-      setHasPermission(status === 'granted');
+      setHasPermission(status === "granted");
     })();
   }, []);
 
   useEffect(() => {
     const disabled =
       capturedPhoto !== null &&
-      namePost !== '' &&
+      namePost !== "" &&
       convertedCoordinate !== null &&
       location !== null
         ? false
@@ -103,9 +103,10 @@ export const CreatePostsScreen = ({ navigation }) => {
 
   const publishPhoto = async () => {
     if (location) {
-      const photo = await uploadPhotoToServer(capturedPhoto);
+      navigation.navigate("DefaultPostsScreen");
 
-      await writeDataToFirestore({
+      const photo = await uploadPhotoToServer(capturedPhoto);
+      writeDataToFirestore({
         photo,
         namePost,
         location,
@@ -113,10 +114,8 @@ export const CreatePostsScreen = ({ navigation }) => {
         userId,
       });
 
-      navigation.navigate('DefaultPostsScreen');
-
       setCapturedPhoto(null);
-      setNamePost('');
+      setNamePost("");
       setLocation(null);
       setConvertedCoordinate(null);
     }
@@ -144,7 +143,7 @@ export const CreatePostsScreen = ({ navigation }) => {
 
           <TouchableOpacity onPress={openGallery}>
             <Text style={styles.cameraText}>
-              {capturedPhoto ? 'Редагувати фото' : 'Завантажте фото'}
+              {capturedPhoto ? "Редагувати фото" : "Завантажте фото"}
             </Text>
           </TouchableOpacity>
 
@@ -171,10 +170,10 @@ export const CreatePostsScreen = ({ navigation }) => {
                 isDisabledPublishBtn
                   ? {
                       ...styles.button,
-                      backgroundColor: '#F6F6F6',
-                      color: '#BDBDBD',
+                      backgroundColor: "#F6F6F6",
+                      color: "#BDBDBD",
                     }
-                  : { ...styles.button, backgroundColor: '#FF6C00' }
+                  : { ...styles.button, backgroundColor: "#FF6C00" }
               }
               disabled={isDisabledPublishBtn}
               onPress={publishPhoto}
@@ -184,21 +183,21 @@ export const CreatePostsScreen = ({ navigation }) => {
                   isDisabledPublishBtn
                     ? {
                         ...styles.buttonTitle,
-                        color: '#BDBDBD',
+                        color: "#BDBDBD",
                       }
-                    : { ...styles.buttonTitle, color: '#FFFFFF' }
+                    : { ...styles.buttonTitle, color: "#FFFFFF" }
                 }
               >
                 {location || !capturedPhoto
-                  ? 'Опублікувати'
-                  : 'Завантаження...'}
+                  ? "Опублікувати"
+                  : "Завантаження..."}
               </Text>
             </TouchableOpacity>
           </View>
         </View>
         <View
           style={{
-            alignItems: 'center',
+            alignItems: "center",
             marginBottom: 34,
           }}
         >
@@ -206,9 +205,9 @@ export const CreatePostsScreen = ({ navigation }) => {
             style={styles.buttonDelete}
             onPress={() => {
               setCapturedPhoto(null);
-              setNamePost('');
+              setNamePost("");
               setConvertedCoordinate(null);
-              console.log('Delete');
+              console.log("Delete");
             }}
           >
             <Feather name="trash-2" size={24} color="#BDBDBD" />
@@ -221,41 +220,41 @@ export const CreatePostsScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
+    height: "100%",
     paddingHorizontal: 16,
-    backgroundColor: '#ffffff',
+    backgroundColor: "#ffffff",
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
   cameraContainer: {
-    position: 'relative',
+    position: "relative",
     marginTop: 32,
     borderRadius: 8,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   cameraIconContainer: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
     transform: [{ translateX: -30 }, { translateY: -30 }],
     zIndex: 1,
   },
   cameraIcon: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     width: 60,
     height: 60,
     borderRadius: 60,
-    backgroundColor: '#FFFFFF4D',
+    backgroundColor: "#FFFFFF4D",
   },
   camera: {
     height: 240,
   },
   cameraText: {
     marginTop: 8,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
     fontSize: 16,
-    color: '#BDBDBD',
+    color: "#BDBDBD",
   },
   inputContainer: {
     marginTop: 32,
@@ -265,10 +264,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     paddingTop: 16,
     paddingBottom: 15,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
     fontSize: 16,
-    borderBottomColor: '#E8E8E8',
-    color: '#212121',
+    borderBottomColor: "#E8E8E8",
+    color: "#212121",
   },
   button: {
     paddingVertical: 16,
@@ -278,9 +277,9 @@ const styles = StyleSheet.create({
   },
 
   buttonTitle: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 16,
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
     lineHeight: 19,
   },
   previewImage: {
@@ -288,11 +287,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   buttonDelete: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     width: 70,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#F6F6F6',
+    backgroundColor: "#F6F6F6",
   },
 });
